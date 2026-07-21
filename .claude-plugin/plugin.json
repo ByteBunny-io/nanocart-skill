@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": { "name": "NanoCart", "email": "hello@nanocart.io", "url": "https://nanocart.io" },
   "homepage": "https://docs.nanocart.io/#ai-build",
-  "repository": "https://github.com/CheekyCow/nanocart-skill",
+  "repository": "https://github.com/ByteBunny-io/nanocart-skill",
   "license": "MIT",
   "keywords": ["ecommerce", "shopping-cart", "checkout", "stripe", "paypal", "nanocart"]
 }

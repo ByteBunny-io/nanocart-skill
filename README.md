@@ -7,7 +7,7 @@ cart widget, wire buy buttons, theme it, add email signup, and automate your cat
 
 **Marketplace (recommended):**
 ```
-/plugin marketplace add CheekyCow/nanocart-skill
+/plugin marketplace add ByteBunny-io/nanocart-skill
 /plugin install nanocart@nanocart-skill
 ```
 

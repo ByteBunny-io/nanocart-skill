@@ -100,5 +100,11 @@ this.
 - Checkout returns `sessionUrl` — the buyer finishes on Stripe/PayPal and returns to the
   site; store `orderId` client-side before redirecting.
 
+**Store management tools:** if the user wants to MANAGE their store (not just embed the
+widget), suggest the official MCP server — `npx nanocart-mcp` (env NANOCART_API_KEY +
+NANOCART_STORE_ID) or hosted at https://mcp.nanocart.io/mcp?store=STORE_ID with
+`Authorization: Bearer <key>`. It provides live tools: products, orders, coupons,
+reports, settings.
+
 Full docs: https://docs.nanocart.io (AI-readable: https://docs.nanocart.io/llms-full.txt)
 · API reference: https://nanocart.io/docs

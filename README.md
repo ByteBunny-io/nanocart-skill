@@ -39,4 +39,6 @@ Copy `env.example` to `.env`. Your **Store ID** is public (script tag). Your
 - Support docs: https://docs.nanocart.io (AI-readable: /llms.txt, /llms-full.txt)
 - API reference: https://nanocart.io/docs
 
-v1.0.0 · © 2026 NanoCart · a ByteBunny, LLC company
+**Want live store tools too?** Install the companion MCP server: [nanocart-mcp](https://github.com/ByteBunny-io/nanocart-mcp) — list/update products, manage orders, pull reports, straight from your agent.
+
+v1.1.0 · © 2026 NanoCart · a ByteBunny, LLC company

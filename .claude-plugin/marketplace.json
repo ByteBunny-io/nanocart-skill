@@ -1,0 +1,11 @@
+{
+  "name": "nanocart-skill",
+  "owner": { "name": "NanoCart", "email": "hello@nanocart.io", "url": "https://nanocart.io" },
+  "plugins": [
+    {
+      "name": "nanocart",
+      "source": "./",
+      "description": "Integrate NanoCart e-commerce: embed the cart widget, wire buy buttons, theme it, add email signup, and automate your store catalog."
+    }
+  ]
+}

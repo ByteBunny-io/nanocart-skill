@@ -1,0 +1,10 @@
+{
+  "name": "nanocart",
+  "description": "Integrate NanoCart e-commerce: embed the cart widget, wire buy buttons, theme it, add email signup, and automate your store catalog.",
+  "version": "1.0.0",
+  "author": { "name": "NanoCart", "email": "hello@nanocart.io", "url": "https://nanocart.io" },
+  "homepage": "https://docs.nanocart.io/#ai-build",
+  "repository": "https://github.com/CheekyCow/nanocart-skill",
+  "license": "MIT",
+  "keywords": ["ecommerce", "shopping-cart", "checkout", "stripe", "paypal", "nanocart"]
+}

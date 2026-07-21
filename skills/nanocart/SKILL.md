@@ -70,7 +70,7 @@ CSS shadow parts (`form`, `row`, `input`, `button`, `options`, `option`, `consen
 ## Task: catalog automation ("create these products", "set up my store")
 
 Admin API, server-side only. Base `https://api.nanocart.io`, header
-`x-api-key: $NANOCART_API_KEY` from `.env` (copy `.env.example`). ALL prices are integer
+`x-api-key: $NANOCART_API_KEY` from `.env` (copy `env.example`). ALL prices are integer
 cents ($19.99 → 1999). Flow for "products from a folder of images":
 
 1. Per image: `POST /shop/{storeId}/admin/upload-url` with

@@ -24,7 +24,7 @@ your existing AGENTS.md / rules file).
 
 ## Credentials
 
-Copy `.env.example` to `.env`. Your **Store ID** is public (script tag). Your
+Copy `env.example` to `.env`. Your **Store ID** is public (script tag). Your
 **API key** is secret — server-side use only, never in website code.
 
 ## Example prompts

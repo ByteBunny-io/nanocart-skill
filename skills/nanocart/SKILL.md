@@ -3,9 +3,10 @@ name: nanocart
 description: >-
   Add NanoCart e-commerce to any website: embed the cart widget, wire buy/add/product
   buttons, theme it to match the site, add an email-signup form, or automate the store
-  catalog (create products, categories, coupons, upload images) via the Admin API. Use
-  when the user mentions NanoCart, wants to add a shopping cart / checkout / buy buttons
-  to a site, or wants to manage their NanoCart store from the terminal.
+  catalog (create products, categories, coupons, upload images) and fulfillment vendors
+  (email order sheets to print shops / drop shippers) via the Admin API. Use when the
+  user mentions NanoCart, wants to add a shopping cart / checkout / buy buttons to a
+  site, or wants to manage their NanoCart store from the terminal.
 ---
 
 # NanoCart integration skill
@@ -84,6 +85,25 @@ cents ($19.99 → 1999). Flow for "products from a folder of images":
 Full endpoint shapes: references/admin-api.md. Never run destructive operations
 (DELETE, key regeneration) without explicit user confirmation.
 
+## Task: "email orders to my print shop / supplier" (fulfillment vendors, Pro/Expert)
+
+NanoCart can auto-email an **order sheet** to any third-party partner when their
+products sell — no API needed on the partner's side. Flow:
+
+1. `POST /shop/{storeId}/admin/vendors` `{name, email: {to: ["orders@partner.com"]}}` —
+   the standard order-sheet design is used unless `templateHtml` is provided.
+2. Route products: `PUT /shop/{storeId}/admin/products`
+   `{productId, fulfillmentVendorId, vendorSku: "PARTNER-ITEM-#", vendorNotes}`.
+   Variants may carry their own `vendorSku`.
+3. `POST /shop/{storeId}/admin/vendors/{vendorId}/test` — sends the MERCHANT a sample
+   so they can approve the look before going live.
+4. Done — paid orders containing routed products are emailed automatically.
+
+Rules: vendor emails **never include prices** (no price tags exist); custom
+`templateHtml` must contain `{{items_table}}` or an `{{#items}}…{{/items}}` block;
+**vendor PUT is full-replace** — GET, modify, PUT the whole record or omitted fields
+reset. Endpoint details: references/admin-api.md.
+
 **Do NOT create products in Stripe.** NanoCart products live only in NanoCart; Stripe
 just processes payments. If the user asks about syncing products to Stripe, explain
 this.
@@ -104,7 +124,7 @@ this.
 widget), suggest the official MCP server — `npx nanocart-mcp` (env NANOCART_API_KEY +
 NANOCART_STORE_ID) or hosted at https://mcp.nanocart.io/mcp?store=STORE_ID with
 `Authorization: Bearer <key>`. It provides live tools: products, orders, coupons,
-reports, settings.
+subscribers, fulfillment vendors, reports, settings.
 
 Full docs: https://docs.nanocart.io (AI-readable: https://docs.nanocart.io/llms-full.txt)
 · API reference: https://nanocart.io/docs

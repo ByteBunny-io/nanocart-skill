@@ -17,7 +17,9 @@ Create (POST): `name`* , `price`* (cents). Optional: `description` (HTML ok),
 `images: [fileUrl, ...]` (upload first — see Uploads), `variants`, `options`,
 `productType: "physical"|"digital"` (default physical), `status: "draft"|"active"`
 (default draft — set `"active"` to publish), `featured`, `slug` (auto from name),
-`taxable` (default true), `tags[]`, `shippingCost` (cents, per_item shipping).
+`taxable` (default true), `tags[]`, `shippingCost` (cents, per_item shipping),
+`fulfillmentVendorId` + `vendorSku` + `vendorNotes` (route orders to a fulfillment
+vendor — see Fulfillment Vendors; variants may carry their own `vendorSku`).
 Returns 201 `{product: {productId, slug, ...}}`.
 
 Variants + options:
@@ -74,6 +76,31 @@ PUT one key at a time: `{"settingKey": "...", "value": {...}}`. Keys:
 
 `GET /shop/{storeId}/admin/orders` (filters/pagination), `PUT` to update status,
 `POST /shop/{storeId}/admin/orders/{orderId}/resend-confirmation`.
+
+## Fulfillment Vendors — `GET/POST /shop/{storeId}/admin/vendors` (Pro/Expert)
+
+Custom partners (local print shop, drop shipper) that get an emailed **order sheet**
+when their routed products sell. Vendor emails **never contain prices** — the template
+system has no price tags by design.
+
+Create: `{name*, email: {to*: ["addr"], cc?: []}, subjectTemplate?, templateHtml?,
+includeShipping? (default true), includeCustomerContact? (default false), notes?,
+status?: "active"|"paused"}`. Max 10 vendors, 5 To + 5 Cc each.
+
+- `templateHtml` empty = standard order sheet. Custom HTML **must** include
+  `{{items_table}}` or an `{{#items}}…{{/items}}` block (else 400
+  `NO_ITEMS_PLACEHOLDER`). Tags: `{{order.number}}` `{{order.date}}` `{{store.name}}`
+  `{{store.logo}}` `{{shipping_address}}` `{{vendor.name}}` `{{vendor.notes}}`; inside
+  item blocks: `{{item.quantity}}` `{{item.name}}` `{{item.variant}}`
+  `{{item.vendorSku}}` `{{item.sku}}` `{{item.notes}}` `{{item.image}}`.
+- `GET/PUT/DELETE /admin/vendors/{vendorId}` — **PUT is full replace**: GET first,
+  modify, PUT the complete record, or omitted fields (like `templateHtml`) are reset.
+- `POST /admin/vendors/draft` `{description, currentHtml?}` → AI-drafted HTML (free).
+- `POST /admin/vendors/{vendorId}/test` → sample order sheet emailed to the MERCHANT.
+- `POST /admin/orders/{orderId}/send-vendor` `{vendorId}` → manual send/re-send.
+- Route products via the product fields above; orders then dispatch automatically at
+  payment. Failures appear on the order's `podFulfillments` (provider `"vendor"`) and
+  retry via `POST /admin/orders/{orderId}/retry-pod` `{"provider": "vendor"}`.
 
 ## Safety rules
 

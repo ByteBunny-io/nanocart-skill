@@ -39,6 +39,13 @@ Base https://api.nanocart.io, header `x-api-key: $NANOCART_API_KEY`. Prices in C
 - Categories: POST /shop/{storeId}/admin/categories {name}. Coupons:
   POST /shop/{storeId}/admin/coupons {code, type, value}.
 - Public sanity check (no auth): GET /shop/{storeId}/products.
+- Fulfillment vendors (Pro/Expert — email order sheets to a print shop / drop
+  shipper): POST /shop/{storeId}/admin/vendors {name, email:{to:["addr"]}}; route
+  products with {fulfillmentVendorId, vendorSku, vendorNotes} on the product; test
+  with POST .../vendors/{vendorId}/test (emails the MERCHANT a sample). Paid orders
+  then dispatch automatically. Vendor emails never contain prices; custom
+  templateHtml must include {{items_table}} or an {{#items}}...{{/items}} block;
+  vendor PUT is full-replace (GET, modify, PUT the whole record).
 - Ask before DELETEs or key regeneration. Never create products in Stripe — the
   catalog lives in NanoCart; Stripe only processes payments.
 

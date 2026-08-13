@@ -94,3 +94,14 @@ Base `https://api.nanocart.io`:
 - `GET /shop/{storeId}/storefront-config` · `GET /shop/resolve-domain?domain=...`
 - `GET /shop/{storeId}/widget-config` · `GET /shop/{storeId}/alerts-config` ·
   `POST /shop/{storeId}/alerts-signup`
+
+## Donations (v1.3.0)
+
+- `data-nanocart-donate="campaign-slug"` on any element opens the donate popup
+  (amounts + one-time/monthly toggle → Stripe/PayPal). Empty value = the store's
+  default campaign. Also `window.nanocart.donate(slug)`.
+- `<nanocart-donate-stats campaign="slug"></nanocart-donate-stats>` renders the live
+  stats card (supporter count / raised / goal bar / Become-a-Supporter button — only
+  fields the merchant enabled). Attributes: `button-text`, `count-label`, `goal-label`.
+  Shadow parts for styling: `card`, `count`, `raised`, `goal`, `bar`, `button`,
+  `branding`. Renders nothing unless the campaign is active.

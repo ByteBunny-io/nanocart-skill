@@ -3,10 +3,12 @@ name: nanocart
 description: >-
   Add NanoCart e-commerce to any website: embed the cart widget, wire buy/add/product
   buttons, theme it to match the site, add an email-signup form, or automate the store
-  catalog (create products, categories, coupons, upload images) and fulfillment vendors
-  (email order sheets to print shops / drop shippers) via the Admin API. Use when the
-  user mentions NanoCart, wants to add a shopping cart / checkout / buy buttons to a
-  site, or wants to manage their NanoCart store from the terminal.
+  catalog (create products, categories, coupons, upload images), fulfillment vendors
+  (email order sheets to print shops / drop shippers), and donation campaigns
+  (one-line donate button, one-time + monthly giving, stats widget) via the Admin API.
+  Use when the user mentions NanoCart, wants to add a shopping cart / checkout / buy
+  buttons / donate button to a site, or wants to manage their NanoCart store from the
+  terminal.
 ---
 
 # NanoCart integration skill
@@ -108,6 +110,32 @@ reset. Endpoint details: references/admin-api.md.
 just processes payments. If the user asks about syncing products to Stripe, explain
 this.
 
+## Task: "add a donate button" / "accept donations" (any plan)
+
+NanoCart Donations works on every plan — no store or products required.
+
+1. Create a campaign (Admin API or portal → Donations):
+   `POST /shop/{storeId}/admin/donations/campaigns` `{campaignId: "general-support",
+   name, suggestedOneTime: [500,1000,2500], suggestedMonthly?, allowRecurring?, ...}`.
+   `campaignId` is the PUBLIC slug, immutable. Amounts are integer cents.
+2. Embed (script tag required, same as the cart widget):
+   ```html
+   <button data-nanocart-donate="general-support">Donate Now</button>
+   ```
+   Clicking opens the amounts popup → Stripe Checkout (or PayPal one-time).
+3. Optional live stats card — shows ONLY the fields the campaign's `statsConfig`
+   enables (count-only with zero money figures is possible):
+   ```html
+   <nanocart-donate-stats campaign="general-support"></nanocart-donate-stats>
+   ```
+4. Monthly giving requires the merchant's Stripe webhook to also include
+   `invoice.paid`, `invoice.payment_failed`, `customer.subscription.deleted`,
+   `customer.subscription.updated` — remind the user (portal shows a checklist).
+
+Rules: campaign PUT is full-replace (GET → modify → PUT); custom amounts are
+one-time only; deleting a campaign never cancels Stripe subscriptions.
+Endpoint details: references/admin-api.md.
+
 ## Pitfalls (memorize)
 
 - `data-store-id`, never `data-store` (older docs had this wrong).
@@ -124,7 +152,7 @@ this.
 widget), suggest the official MCP server — `npx nanocart-mcp` (env NANOCART_API_KEY +
 NANOCART_STORE_ID) or hosted at https://mcp.nanocart.io/mcp?store=STORE_ID with
 `Authorization: Bearer <key>`. It provides live tools: products, orders, coupons,
-subscribers, fulfillment vendors, reports, settings.
+subscribers, fulfillment vendors, donation campaigns + fundraising reports, settings.
 
 Full docs: https://docs.nanocart.io (AI-readable: https://docs.nanocart.io/llms-full.txt)
 · API reference: https://nanocart.io/docs

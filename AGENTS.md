@@ -46,6 +46,12 @@ Base https://api.nanocart.io, header `x-api-key: $NANOCART_API_KEY`. Prices in C
   then dispatch automatically. Vendor emails never contain prices; custom
   templateHtml must include {{items_table}} or an {{#items}}...{{/items}} block;
   vendor PUT is full-replace (GET, modify, PUT the whole record).
+- Donations (every plan): POST /shop/{storeId}/admin/donations/campaigns
+  {campaignId (public slug), name, suggestedOneTime: [cents], ...}; embed with
+  <button data-nanocart-donate="slug"> + <nanocart-donate-stats campaign="slug">.
+  Campaign PUT is full-replace; statsConfig controls what the public widget shows
+  (disabled fields never leave the API); monthly giving needs 4 extra Stripe webhook
+  events (invoice.paid, invoice.payment_failed, customer.subscription.deleted/.updated).
 - Ask before DELETEs or key regeneration. Never create products in Stripe — the
   catalog lives in NanoCart; Stripe only processes payments.
 

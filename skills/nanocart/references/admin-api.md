@@ -102,6 +102,30 @@ status?: "active"|"paused"}`. Max 10 vendors, 5 To + 5 Cc each.
   payment. Failures appear on the order's `podFulfillments` (provider `"vendor"`) and
   retry via `POST /admin/orders/{orderId}/retry-pod` `{"provider": "vendor"}`.
 
+## Donations — `GET/POST /shop/{storeId}/admin/donations/campaigns` (every plan)
+
+Campaigns power `data-nanocart-donate="slug"` and `<nanocart-donate-stats>`.
+Create: `{campaignId* (public slug, immutable), name*, description?, buttonText?,
+successUrl?, suggestedOneTime?: [cents], suggestedMonthly?: [cents] (≤8 each,
+100–999999), allowCustomAmount? (one-time only), allowOneTime?, allowRecurring?,
+defaultFrequency?, goalAmountCents?, goalMetric?: "month_total"|"mrr"|"all_time",
+statsConfig?: {showCount, showRaised, showMonthly, showGoal, showButton},
+hideBranding? (Pro/Expert), status?: "active"|"paused"}`.
+
+- Caps: 1 campaign Free/Standard, 10 Pro/Expert (403 TIER_LIMIT); duplicate slug 409.
+- `GET/PUT/DELETE .../campaigns/{campaignId}` — **PUT is full replace** (GET → modify
+  → PUT; counters + createdAt preserved server-side, slug immutable).
+- `statsConfig` controls the PUBLIC stats widget — disabled fields never leave the
+  API, so count-only-no-money is enforceable.
+- Records: `GET /admin/donations?kind=one_time|recurring|recurring_payment&limit&lastKey`;
+  supporters: `GET /admin/donations/supporters`; report:
+  `GET /admin/donations/report?from&to` (range fold + live stats + per-campaign).
+- Public (no auth): `GET /shop/{storeId}/donation-config/{slug}`,
+  `GET .../donation-stats/{slug}`, `POST .../donate` `{campaignId, amountCents,
+  frequency, email?, processor?}` → `{sessionUrl}`. `_default` slug = oldest active
+  campaign. Monthly = Stripe only + requires the 4 subscription webhook events on the
+  merchant's Stripe endpoint.
+
 ## Safety rules
 
 - Ask before DELETE operations or `regenerate-key` (regenerating invalidates the old

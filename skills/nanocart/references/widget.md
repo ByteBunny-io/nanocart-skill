@@ -105,3 +105,12 @@ Base `https://api.nanocart.io`:
   fields the merchant enabled). Attributes: `button-text`, `count-label`, `goal-label`.
   Shadow parts for styling: `card`, `count`, `raised`, `goal`, `bar`, `button`,
   `branding`. Renders nothing unless the campaign is active.
+
+## Cart bubble visibility (v1.3.1)
+
+- `data-hide-empty-cart="true"` — the floating cart bubble renders only while the cart
+  has items (appears on add, vanishes when emptied). Recommended for donation-only or
+  single-product pages; also a portal toggle (Settings → Widget Appearance). `"false"`
+  pins it always-on over the portal setting.
+- `data-hide-badge="true"` — never render the bubble (only for pages that cannot add
+  to cart at all).
